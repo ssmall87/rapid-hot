@@ -32,7 +32,7 @@ function Nav({ user, onLogout }) {
       { to: '/plumber', label: 'Plumber Availability' },
     ],
     plumber: [
-      { to: '/plumber', label: 'Availability' },
+      { to: '/plumber', label: 'My Schedule' },
     ],
     homeowner: [
       { to: '/homeowner', label: 'Book Service' },
@@ -84,7 +84,7 @@ function AppRoutes({ user, onLogin, onLogout }) {
       {user && <main className="app-main">
         <Routes>
           <Route path="/admin" element={<AdminBooking />} />
-          <Route path="/plumber" element={<PlumberSchedule />} />
+          <Route path="/plumber" element={<PlumberSchedule user={user} />} />
           <Route path="/property-manager" element={<PropertyManager user={user} />} />
           <Route path="/homeowner" element={<Homeowner user={user} />} />
           <Route path="/schedule/:token" element={<TenantSchedule />} />

@@ -9,7 +9,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+// In dev mode (NODE_ENV not set), use 3001 so Vite can proxy to it
+// In production (Railway sets PORT), use that
+const PORT = process.env.NODE_ENV === 'production' ? (process.env.PORT || 3001) : 3001;
 
 app.use(cors());
 app.use(express.json());

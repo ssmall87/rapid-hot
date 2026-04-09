@@ -317,6 +317,24 @@ router.post('/users', (req, res) => {
   }
 });
 
+router.get('/plumbers/by-user/:userId', (req, res) => {
+  const plumber = db.prepare('SELECT * FROM plumbers WHERE user_id = ?').get(req.params.userId);
+  if (!plumber) {
+    // Try matching by email via users table
+    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.params.userId);
+    if (user) {
+      const byEmail = db.prepare('SELECT * FROM plumbers WHERE email = ?').get(user.email);
+      if (byEmail) {
+        // Link them
+        db.prepare('UPDATE plumbers SET user_id = ? WHERE id = ?').run(user.id, byEmail.id);
+        return res.json(byEmail);
+      }
+    }
+    return res.status(404).json({ error: 'Plumber record not found' });
+  }
+  res.json(plumber);
+});
+
 router.get('/users/by-email/:email', (req, res) => {
   const email = decodeURIComponent(req.params.email).trim().toLowerCase();
   const user = db.prepare('SELECT * FROM users WHERE LOWER(email) = ?').get(email);
