@@ -318,7 +318,8 @@ router.post('/users', (req, res) => {
 });
 
 router.get('/users/by-email/:email', (req, res) => {
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(req.params.email);
+  const email = decodeURIComponent(req.params.email).trim().toLowerCase();
+  const user = db.prepare('SELECT * FROM users WHERE LOWER(email) = ?').get(email);
   if (!user) return res.status(404).json({ error: 'User not found' });
   res.json(user);
 });
@@ -501,6 +502,7 @@ router.post('/seed', (req, res) => {
   const transaction = db.transaction(() => {
     // Create demo users
     const adminUser = db.prepare("INSERT OR IGNORE INTO users (name, email, user_type) VALUES ('Shane (Admin)', 'shane@rapidhot.com', 'admin')").run();
+    const adminUser2 = db.prepare("INSERT OR IGNORE INTO users (name, email, user_type) VALUES ('Delince (Admin)', 'delince@rapidhot.com', 'admin')").run();
     const plumberUser1 = db.prepare("INSERT OR IGNORE INTO users (name, email, user_type) VALUES ('Mike Johnson', 'mike@plumbing.com', 'plumber')").run();
     const plumberUser2 = db.prepare("INSERT OR IGNORE INTO users (name, email, user_type) VALUES ('Sarah Davis', 'sarah@plumbing.com', 'plumber')").run();
     const pmUser = db.prepare("INSERT OR IGNORE INTO users (name, email, user_type) VALUES ('Tom Property Mgr', 'tom@properties.com', 'property_manager')").run();

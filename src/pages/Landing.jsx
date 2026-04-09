@@ -26,10 +26,11 @@ export default function Landing({ onLogin }) {
 
   const handleSignIn = async () => {
     setError('');
-    if (!email) { setError('Enter your email'); return; }
+    const trimmedEmail = email.trim().toLowerCase();
+    if (!trimmedEmail) { setError('Enter your email'); return; }
     setLoading(true);
     try {
-      const res = await fetch(`${API}/users/by-email/${encodeURIComponent(email)}`);
+      const res = await fetch(`${API}/users/by-email/${encodeURIComponent(trimmedEmail)}`);
       if (res.ok) {
         const user = await res.json();
         onLogin(user);
