@@ -1,0 +1,6 @@
+node_modules/
+dist/
+server/data/scheduler.db
+server/data/scheduler.db-wal
+server/data/scheduler.db-shm
+.claude/
